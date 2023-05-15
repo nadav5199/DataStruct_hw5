@@ -86,11 +86,9 @@ public class Sort<T extends Comparable<T>> {
 
     public static void radixSort(int[] array, int base) {
         int max = findMax(array);
-        int d = 1;
 
-        for (int i = 0; max / d > 0; ++i) {
-            countSort(array, base, d);
-            d *= 10;
+        for (int i = 1; max / i > 0; i*=base) {
+            countSort(array, base, i);
         }
 
     }
@@ -107,13 +105,13 @@ public class Sort<T extends Comparable<T>> {
         return max;
     }
 
-    public static void countSort(int[] arr, int base, int d) {
+    private static void countSort(int[] arr, int base, int d) {
         int[] count = new int[base];
         int[] output = new int[arr.length];
 
         int i;
         for (i = 0; i < arr.length; ++i) {
-            ++count[arr[i] / d % 10];
+            ++count[(arr[i] / d) % base];
         }
 
         for (i = 1; i < count.length; ++i) {
@@ -122,13 +120,13 @@ public class Sort<T extends Comparable<T>> {
 
         for (i = 0; i < count.length; ++i) {
             if (count[i] > 0) {
-                int var10002 = count[i]--;
+                count[i]--;
             }
         }
 
         for (i = arr.length - 1; i >= 0; --i) {
-            output[count[arr[i] / d % 10]] = arr[i];
-            --count[arr[i] / d % 10];
+            output[count[(arr[i] / d )% base]] = arr[i];
+            --count[(arr[i] / d )% base];
         }
 
         for (i = 0; i < arr.length; ++i) {
@@ -154,7 +152,7 @@ public class Sort<T extends Comparable<T>> {
 
     private int partitionRecitation(T[] arr, int start, int end) {
         T x = arr[end];
-        int i = start-1;
+        int i = start - 1;
 
         for (int j = start; j < end; ++j) {
             if (arr[j].compareTo(x) <= 0) {

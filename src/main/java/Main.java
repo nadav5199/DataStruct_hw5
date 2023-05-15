@@ -3,9 +3,9 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args){
         System.out.println("Starting...");
-        Integer[] arr = new Integer[]{4124,12,12,235,34,534,1,12,152,32,2535,2,4363,6346,34,634};
+        int[] arr = new int[]{1,5,45,44,23,15};
         Sort s = new Sort();
-        s.quickSortClass(arr);
+        Sort.radixSort(arr,6);
         System.out.println(Arrays.toString(arr));
     }
 }
