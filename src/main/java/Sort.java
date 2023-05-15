@@ -4,25 +4,27 @@ public class Sort<T extends Comparable<T>> {
 
     public Sort() {
     }
+
     public void mergeSortIterative(T[] array) {
-        int len=1;
+        int len = 1;
         while (len < array.length) {
-            int i=0;
+            int i = 0;
             while (i < array.length) {
-                int L2=i+len;
-                int R2=i+(2*len)-1;
+                int L2 = i + len;
+                int R2 = i + (2 * len) - 1;
                 if (L2 >= array.length) {
                     break;
                 }
                 if (R2 >= array.length) {
                     R2 = array.length - 1;
                 }
-                merge(array,i,L2-1,R2);
-                i=i+(2*len);
+                merge(array, i, L2 - 1, R2);
+                i = i + (2 * len);
             }
-            len*=2;
+            len *= 2;
         }
     }
+
     public void mergeSortRecursive(T[] array) {
         this.mergeSortRecursive(array, 0, array.length - 1);
     }
@@ -44,11 +46,11 @@ public class Sort<T extends Comparable<T>> {
         Object[] rightArr = new Object[rightLength];
 
         int l;
-        for(l = 0; l < leftLength; ++l) {
+        for (l = 0; l < leftLength; ++l) {
             leftArr[l] = arr[left + l];
         }
 
-        for(l = 0; l < rightLength; ++l) {
+        for (l = 0; l < rightLength; ++l) {
             rightArr[l] = arr[mid + 1 + l];
         }
 
@@ -56,7 +58,7 @@ public class Sort<T extends Comparable<T>> {
         int r = 0;
 
         int k;
-        for(k = left; l < leftLength && r < rightLength; ++k) {
+        for (k = left; l < leftLength && r < rightLength; ++k) {
             T leftValue = (T) leftArr[l];
             T rightValue = (T) rightArr[r];
             if (leftValue.compareTo(rightValue) <= 0) {
@@ -68,24 +70,25 @@ public class Sort<T extends Comparable<T>> {
             }
         }
 
-        while(l < leftLength) {
+        while (l < leftLength) {
             arr[k] = (T) leftArr[l];
             ++l;
             ++k;
         }
 
-        while(r < rightLength) {
+        while (r < rightLength) {
             arr[k] = (T) rightArr[r];
             ++r;
             ++k;
         }
 
     }
+
     public static void radixSort(int[] array, int base) {
         int max = findMax(array);
         int d = 1;
 
-        for(int i = 0; max / d > 0; ++i) {
+        for (int i = 0; max / d > 0; ++i) {
             countSort(array, base, d);
             d *= 10;
         }
@@ -95,7 +98,7 @@ public class Sort<T extends Comparable<T>> {
     private static int findMax(int[] arr) {
         int max = 0;
 
-        for(int i = 0; i < arr.length; ++i) {
+        for (int i = 0; i < arr.length; ++i) {
             if (arr[i] > max) {
                 max = arr[i];
             }
@@ -109,26 +112,26 @@ public class Sort<T extends Comparable<T>> {
         int[] output = new int[arr.length];
 
         int i;
-        for(i = 0; i < arr.length; ++i) {
+        for (i = 0; i < arr.length; ++i) {
             ++count[arr[i] / d % 10];
         }
 
-        for(i = 1; i < count.length; ++i) {
+        for (i = 1; i < count.length; ++i) {
             count[i] += count[i - 1];
         }
 
-        for(i = 0; i < count.length; ++i) {
+        for (i = 0; i < count.length; ++i) {
             if (count[i] > 0) {
                 int var10002 = count[i]--;
             }
         }
 
-        for(i = arr.length - 1; i >= 0; --i) {
+        for (i = arr.length - 1; i >= 0; --i) {
             output[count[arr[i] / d % 10]] = arr[i];
             --count[arr[i] / d % 10];
         }
 
-        for(i = 0; i < arr.length; ++i) {
+        for (i = 0; i < arr.length; ++i) {
             arr[i] = output[i];
         }
 
@@ -140,7 +143,7 @@ public class Sort<T extends Comparable<T>> {
 
     public void quickSortRecitation(T[] arr, int p, int r) {
         if (r - p > this.threshold) {
-            int q = this.partitionClass(arr, p, r);
+            int q = this.partitionRecitation(arr, p, r);
             this.quickSortRecitation(arr, p, q - 1);
             this.quickSortRecitation(arr, q + 1, r);
         } else {
@@ -149,18 +152,18 @@ public class Sort<T extends Comparable<T>> {
 
     }
 
-    private int partitionRecitation(T[] arr, int p, int r) {
-        T x = arr[r];
-        int i = p;
+    private int partitionRecitation(T[] arr, int start, int end) {
+        T x = arr[end];
+        int i = start-1;
 
-        for(int j = p; j < r; ++j) {
-            if (arr[j].compareTo(x) < 0 || arr[j].equals(x)) {
-                ++i;
+        for (int j = start; j < end; ++j) {
+            if (arr[j].compareTo(x) <= 0) {
+                i++;
                 this.swap(arr, i, j);
             }
         }
 
-        this.swap(arr, i + 1, r);
+        this.swap(arr, i + 1, end);
         return i + 1;
     }
 
@@ -168,7 +171,7 @@ public class Sort<T extends Comparable<T>> {
         this.quickSortClass(arr, 0, arr.length - 1);
     }
 
-    public void quickSortClass(T[] arr, int p, int r) {
+    private void quickSortClass(T[] arr, int p, int r) {
         if (r - p > this.threshold) {
             int q = this.partitionClass(arr, p, r);
             this.quickSortClass(arr, p, q - 1);
@@ -176,12 +179,11 @@ public class Sort<T extends Comparable<T>> {
         } else {
             this.simpleSort(arr, p, r);
         }
-
     }
 
     public void simpleSort(T[] arr, int p, int r) {
-        for(int i = p; i < r; ++i) {
-            for(int j = i + 1; j <= r; ++j) {
+        for (int i = p; i < r; ++i) {
+            for (int j = i + 1; j <= r; ++j) {
                 if (arr[i].compareTo(arr[j]) > 0) {
                     this.swap(arr, i, j);
                 }
@@ -190,29 +192,27 @@ public class Sort<T extends Comparable<T>> {
 
     }
 
-    private int partitionClass(T[] arr, int p, int r) {
-        T x = arr[r];
-        int j = r - 1;
-        int i = p;
-
-        while(true) {
-            while(arr[i].compareTo(x) >= 0 || i > r) {
-                if (j >= 0) {
-                    while(arr[j].compareTo(x) > 0 && j >= p) {
-                        --j;
-                    }
-                }
-
-                if (i >= j) {
-                    this.swap(arr, j + 1, r);
-                    return j + 1;
-                }
-
-                this.swap(arr, i, j);
+    private int partitionClass(T[] arr, int start, int end) {
+        T x = arr[end];
+        int j = end;
+        int i = start - 1;
+        while (true) {
+            i++;
+            j--;
+            while (j >= start && x.compareTo(arr[j]) < 0) {
+                j--;
             }
-
-            ++i;
+            while (i < end && x.compareTo(arr[i]) >= 0) {
+                i++;
+            }
+            if (i < j) {
+                this.swap(arr, i, j);
+            } else {
+                this.swap(arr, j + 1, end);
+                return j + 1;
+            }
         }
+
     }
 
     private void swap(T[] arr, int i, int j) {
