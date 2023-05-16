@@ -139,7 +139,7 @@ public class Sort<T extends Comparable<T>> {
         this.quickSortRecitation(arr, 0, arr.length - 1);
     }
 
-    public void quickSortRecitation(T[] arr, int p, int r) {
+    private void quickSortRecitation(T[] arr, int p, int r) {
         if (r - p > this.threshold) {
             int q = this.partitionRecitation(arr, p, r);
             this.quickSortRecitation(arr, p, q - 1);
