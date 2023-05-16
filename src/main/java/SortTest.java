@@ -5,52 +5,79 @@ import static java.util.Arrays.sort;
 
 public class SortTest {
     public static void main(String[] args) {
-        int[] size = new int[]{10000,50000,100000,500000,1000000};//array for sizes
+
+
+        int[] size = new int[]{10000, 50000, 100000, 500000, 1000000};//array for sizes
+        String[] algo = new String[]{"mergeSortIterative:", "mergeSortRecursive:", "quickSortClass:", "quickSortRecitation:", "java's sort:", "radixSort:"};
         int n = 100000;
-        int Numiter = 100;
-        int sort =0;
-        int[][] durationList = durationList(n, Numiter,sort);
-        double[] avg = getAvg(durationList);
-        double[] div = getDiv(durationList);
+        int Numiter = 250;
+        int sort = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 5; j++) {
+                int[][] durationList = durationList(size[j], Numiter, i);
+                double[] avg = getAvg(durationList);
+                double[] div = getDiv(durationList);
+                switch (i) {
+                    case 0:
+                        System.out.println("for random array of size " + size[j] + ":");
+                        break;
+                    case 1:
+                        System.out.println("for sorted array of size " + size[j] + ":");
+                        break;
+                    case 2:
+                        System.out.println("for reverse sorted array of size " + size[j] + ":");
+                        break;
+                }//how the array is sorted and the size
+                for (int k = 0; k < 6; k++) {
+                    System.out.println(algo[k] + " avg: " + avg[k] + " , diviation: " + div[k]);
+                }
+            }
+
+        }
     }
+
 
     public static double[] getAvg(int[][] arr) {
         double[] avg = new double[6];
         for (int i = 0; i < 6; i++) {
-            avg[i] = avg(arr,i);
+            avg[i] = avg(arr, i);
         }
         return avg;
     }
+
     public static double[] getDiv(int[][] arr) {
         double[] div = new double[6];
         for (int i = 0; i < 6; i++) {
-            div[i] = div(arr,i,avg(arr,i));
+            div[i] = div(arr, i, avg(arr, i));
         }
         return div;
     }
+
     public static Integer[] random(int size) {
         Integer[] arr = new Integer[size];
         Random randomGenerator = new Random();
-        for (int j = 0; j < arr.length; ++j) //initialize the array
+        for (int j = 0; j < arr.length; j++) //initialize the array
         {
-            arr[j] = randomGenerator.nextInt();
+            arr[j] = randomGenerator.nextInt(Integer.MAX_VALUE);
         }
         return arr;
     }
-    public static Integer[] sorted(int size)
-    {
+
+    public static Integer[] sorted(int size) {
         Integer[] arr = random(size);
         Arrays.sort(arr);
         return arr;
     }
+
     public static Integer[] reverse(int size) {
         Integer[] arr = sorted(size);
         Integer[] reverse = new Integer[size];
         for (int i = 0; i < arr.length; i++) {
-            reverse[i] = arr[arr.length-i-1];
+            reverse[i] = arr[arr.length - i - 1];
         }
         return reverse;
     }
+
     public static int cBase(int n) {
         switch (n) {
             case 10000:
@@ -67,8 +94,9 @@ public class SortTest {
         return n;
     }
 
-    public static int[][] durationList(int size, int Numiter , int sort) {
+    public static int[][] durationList(int size, int Numiter, int sort) {
         Sort<Integer> sorter = new Sort<Integer>();
+        sorter.setNaiveSortThreshold(500);
         int[][] durationList = new int[6][Numiter];
         int[] avg = new int[6];
         Integer[] arr = new Integer[size];
@@ -77,10 +105,13 @@ public class SortTest {
             {
                 case 0:
                     arr = random(size);
+                    break;
                 case 1:
                     arr = sorted(size);
+                    break;
                 case 2:
                     arr = reverse(size);
+                    break;
             }
             for (int i = 0; i < 6; i++) //choose the algo
             {
@@ -96,6 +127,7 @@ public class SortTest {
                         long endTime = System.currentTimeMillis();
                         int duration = (int) (endTime - startTime);
                         durationList[i][k] = duration;
+                        break;
                     }
                     case 1://mergeSortIterative
                     {
@@ -108,30 +140,44 @@ public class SortTest {
                         long endTime = System.currentTimeMillis();
                         int duration = (int) (endTime - startTime);
                         durationList[i][k] = duration;
+                        break;
                     }
                     case 2://quickSortClass
                     {
+
                         Integer[] Copy = new Integer[arr.length];
                         for (int j = 0; j < arr.length; ++j) {//initialize the array
                             Copy[j] = arr[i];
                         }
-                        long startTime = System.currentTimeMillis();
-                        sorter.quickSortClass(Copy);
-                        long endTime = System.currentTimeMillis();
-                        int duration = (int) (endTime - startTime);
-                        durationList[i][k] = duration;
+                        try {
+                            long startTime = System.currentTimeMillis();
+                            sorter.quickSortClass(Copy);
+                            long endTime = System.currentTimeMillis();
+                            int duration = (int) (endTime - startTime);
+                            durationList[i][k] = duration;
+                            break;
+                        } catch (StackOverflowError e) {
+                            System.err.println("ouch!");
+                            continue;
+                        }
                     }
                     case 3://quickSortRecitation
                     {
-                        Integer[] Copy = new Integer[arr.length];
-                        for (int j = 0; j < arr.length; ++j) {//initialize the array
-                            Copy[j] = arr[i];
+                        try {
+                            Integer[] Copy = new Integer[arr.length];
+                            for (int j = 0; j < arr.length; ++j) {//initialize the array
+                                Copy[j] = arr[i];
+                            }
+                            long startTime = System.currentTimeMillis();
+                            sorter.quickSortRecitation(Copy);
+                            long endTime = System.currentTimeMillis();
+                            int duration = (int) (endTime - startTime);
+                            durationList[i][k] = duration;
+                            break;
+                        } catch (StackOverflowError e) {
+                            System.err.println("ouch!");
+                            continue;
                         }
-                        long startTime = System.currentTimeMillis();
-                        sorter.quickSortRecitation(Copy);
-                        long endTime = System.currentTimeMillis();
-                        int duration = (int) (endTime - startTime);
-                        durationList[i][k] = duration;
                     }
                     case 4://Arrays.sort
                     {
@@ -144,6 +190,7 @@ public class SortTest {
                         long endTime = System.currentTimeMillis();
                         int duration = (int) (endTime - startTime);
                         durationList[i][k] = duration;
+                        break;
                     }
                     case 5://radix
                     {
@@ -156,6 +203,7 @@ public class SortTest {
                         long endTime = System.currentTimeMillis();
                         int duration = (int) (endTime - startTime);
                         durationList[i][k] = duration;
+
                     }
 
                 }
@@ -169,14 +217,14 @@ public class SortTest {
         for (int i = 0; i < arr[0].length; i++) {
             sum += arr[row][i];
         }
-        return  ((double)sum / arr[row].length);
+        return ((double) sum / arr[row].length);
     }
 
     public static double div(int[][] arr, int row, double avg) {
         double sum = 0;
         for (int i = 0; i < arr[0].length; i++) {
-            sum += Math.pow((avg - arr[row][i]),2);
+            sum += Math.pow((avg - arr[row][i]), 2);
         }
-        return Math.sqrt((double) sum/arr[row].length);
+        return Math.sqrt((double) sum / arr[row].length);
     }
 }

@@ -1,8 +1,9 @@
 
 public class Sort<T extends Comparable<T>> {
-    private int threshold = 2;
+    private int threshold;
 
     public Sort() {
+        this.threshold=16;
     }
 
     public void mergeSortIterative(T[] array) {
@@ -87,7 +88,7 @@ public class Sort<T extends Comparable<T>> {
     public static void radixSort(int[] array, int base) {
         int max = findMax(array);
 
-        for (int i = 1; max / i > 0; i*=base) {
+        for (long i = 1; max / i > 0; i*=base) {
             countSort(array, base, i);
         }
 
@@ -97,7 +98,7 @@ public class Sort<T extends Comparable<T>> {
         int max = 0;
 
         for (int i = 0; i < arr.length; ++i) {
-            if (arr[i] > max) {
+            if (Math.abs(arr[i]) > max) {
                 max = arr[i];
             }
         }
@@ -105,31 +106,31 @@ public class Sort<T extends Comparable<T>> {
         return max;
     }
 
-    private static void countSort(int[] arr, int base, int d) {
+    private static void countSort(int[] arr, int base, long d) {
         int[] count = new int[base];
         int[] output = new int[arr.length];
 
         int i;
-        for (i = 0; i < arr.length; ++i) {
-            ++count[(arr[i] / d) % base];
+        for (i = 0; i < arr.length; i++) {
+            ++count[(int) (((arr[i] / d) % base)<0?((arr[i] / d) % base)+base:((arr[i] / d) % base))];
         }
 
-        for (i = 1; i < count.length; ++i) {
+        for (i = 1; i < count.length; i++) {
             count[i] += count[i - 1];
         }
 
-        for (i = 0; i < count.length; ++i) {
+        for (i = 0; i < count.length; i++) {
             if (count[i] > 0) {
                 count[i]--;
             }
         }
 
-        for (i = arr.length - 1; i >= 0; --i) {
-            output[count[(arr[i] / d )% base]] = arr[i];
-            --count[(arr[i] / d )% base];
+        for (i = arr.length - 1; i >= 0; i--) {
+            output[count[(int) ((arr[i] / d )% base)]] = arr[i];
+            --count[(int) ((arr[i] / d )% base)];
         }
 
-        for (i = 0; i < arr.length; ++i) {
+        for (i = 0; i < arr.length; i++) {
             arr[i] = output[i];
         }
 
@@ -192,15 +193,15 @@ public class Sort<T extends Comparable<T>> {
 
     private int partitionClass(T[] arr, int start, int end) {
         T x = arr[end];
-        int j = end;
-        int i = start - 1;
+        int j = end -1 ;
+        int i = start;
         while (true) {
             i++;
             j--;
-            while (j >= start && x.compareTo(arr[j]) < 0) {
+            while (j >= start && arr[j].compareTo(x) > 0) {
                 j--;
             }
-            while (i < end && x.compareTo(arr[i]) >= 0) {
+            while (i <= end && arr[i].compareTo(x) <= 0) {
                 i++;
             }
             if (i < j) {
