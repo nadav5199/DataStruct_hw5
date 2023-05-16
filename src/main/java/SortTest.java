@@ -5,8 +5,26 @@ import static java.util.Arrays.sort;
 
 public class SortTest {
     public static void main(String[] args) {
-        int n = 10000;
+        int n = 100000;
         int Numiter = 100;
+        int[][] durationList  = fill(n,Numiter);
+    }
+    public static int cBase(int n) {
+        switch (n) {
+            case 10000:
+                return (int) Math.pow(2, 10);
+            case 50000:
+                return (int) Math.pow(2, 15);
+            case 100000:
+                return (int) Math.pow(2, 16);
+            case 500000:
+                return (int) Math.pow(2, 17);
+            case 1000000:
+                return (int) Math.pow(2, 18);
+        }
+        return n;
+    }
+    public static int[][] fill(int n,int Numiter) {
         Random randomGenerator = new Random();
         Sort<Integer> sorter = new Sort<Integer>();
         int[][] durationList = new int[6][Numiter];
@@ -96,22 +114,13 @@ public class SortTest {
                 }
             }
         }
-
+        return durationList;
     }
-
-    public static int cBase(int n) {
-        switch (n) {
-            case 10000:
-                return (int) Math.pow(2, 10);
-            case 50000:
-                return (int) Math.pow(2, 15);
-            case 100000:
-                return (int) Math.pow(2, 16);
-            case 500000:
-                return (int) Math.pow(2, 17);
-            case 1000000:
-                return (int) Math.pow(2, 18);
+    public static int avg (int[][] arr, int row) {
+        long sum =0;
+        for (int i = 0; i < arr[0].length; i++) {
+            sum+=arr[row][i];
         }
-        return n;
+        return (int)(sum/arr[row].length);
     }
 }
