@@ -87,11 +87,9 @@ public class Sort<T extends Comparable<T>> {
 
     public static void radixSort(int[] array, int base) {
         int max = findMax(array);
-
         for (long i = 1; max / i > 0; i*=base) {
             countSort(array, base, i);
         }
-
     }
 
     private static int findMax(int[] arr) {
@@ -109,7 +107,6 @@ public class Sort<T extends Comparable<T>> {
     private static void countSort(int[] arr, int base, long d) {
         int[] count = new int[base];
         int[] output = new int[arr.length];
-
         int i;
         for (i = 0; i < arr.length; i++) {
             ++count[(int) (((arr[i] / d) % base)<0?((arr[i] / d) % base)+base:((arr[i] / d) % base))];
@@ -133,7 +130,6 @@ public class Sort<T extends Comparable<T>> {
         for (i = 0; i < arr.length; i++) {
             arr[i] = output[i];
         }
-
     }
 
     public void quickSortRecitation(T[] arr) {
@@ -181,8 +177,8 @@ public class Sort<T extends Comparable<T>> {
     }
 
     public void simpleSort(T[] arr, int p, int r) {
-        for (int i = p; i < r; ++i) {
-            for (int j = i + 1; j <= r; ++j) {
+        for (int i = p; i < r; i++) {
+            for (int j = i + 1; j <= r; j++) {
                 if (arr[i].compareTo(arr[j]) > 0) {
                     this.swap(arr, i, j);
                 }
@@ -196,8 +192,6 @@ public class Sort<T extends Comparable<T>> {
         int j = end -1 ;
         int i = start;
         while (true) {
-            i++;
-            j--;
             while (j >= start && arr[j].compareTo(x) > 0) {
                 j--;
             }

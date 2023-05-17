@@ -120,7 +120,7 @@ public class SortTest {
                     {
                         Integer[] Copy = new Integer[arr.length];
                         for (int j = 0; j < arr.length; ++j) {//initialize the array
-                            Copy[j] = arr[i];
+                            Copy[j] = arr[j];
                         }
                         long startTime = System.currentTimeMillis();
                         sorter.mergeSortRecursive(Copy);
@@ -133,7 +133,7 @@ public class SortTest {
                     {
                         Integer[] Copy = new Integer[arr.length];
                         for (int j = 0; j < arr.length; ++j) {//initialize the array
-                            Copy[j] = arr[i];
+                            Copy[j] = arr[j];
                         }
                         long startTime = System.currentTimeMillis();
                         sorter.mergeSortIterative(Copy);
@@ -147,7 +147,7 @@ public class SortTest {
 
                         Integer[] Copy = new Integer[arr.length];
                         for (int j = 0; j < arr.length; ++j) {//initialize the array
-                            Copy[j] = arr[i];
+                            Copy[j] = arr[j];
                         }
                         try {
                             long startTime = System.currentTimeMillis();
@@ -166,7 +166,7 @@ public class SortTest {
                         try {
                             Integer[] Copy = new Integer[arr.length];
                             for (int j = 0; j < arr.length; ++j) {//initialize the array
-                                Copy[j] = arr[i];
+                                Copy[j] = arr[j];
                             }
                             long startTime = System.currentTimeMillis();
                             sorter.quickSortRecitation(Copy);
