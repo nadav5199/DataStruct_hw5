@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 
 public class Sort<T extends Comparable<T>> {
     private int threshold;
@@ -43,8 +44,8 @@ public class Sort<T extends Comparable<T>> {
     public void merge(T[] arr, int left, int mid, int right) {
         int leftLength = mid - left + 1;
         int rightLength = right - mid;
-        Object[] leftArr = new Object[leftLength];
-        Object[] rightArr = new Object[rightLength];
+        T[] leftArr = (T[]) Array.newInstance(Comparable.class,leftLength);
+        T[] rightArr = (T[]) Array.newInstance(Comparable.class,rightLength);
 
         int l;
         for (l = 0; l < leftLength; ++l) {
@@ -60,8 +61,8 @@ public class Sort<T extends Comparable<T>> {
 
         int k;
         for (k = left; l < leftLength && r < rightLength; ++k) {
-            T leftValue = (T) leftArr[l];
-            T rightValue = (T) rightArr[r];
+            T leftValue = leftArr[l];
+            T rightValue = rightArr[r];
             if (leftValue.compareTo(rightValue) <= 0) {
                 arr[k] = leftValue;
                 ++l;
@@ -72,13 +73,13 @@ public class Sort<T extends Comparable<T>> {
         }
 
         while (l < leftLength) {
-            arr[k] = (T) leftArr[l];
+            arr[k] = leftArr[l];
             ++l;
             ++k;
         }
 
         while (r < rightLength) {
-            arr[k] = (T) rightArr[r];
+            arr[k] = rightArr[r];
             ++r;
             ++k;
         }

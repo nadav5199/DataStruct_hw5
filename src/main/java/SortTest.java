@@ -5,11 +5,40 @@ import static java.util.Arrays.sort;
 
 public class SortTest {
     public static void main(String[] args) {
-
-
+        produceRadix();
+    }
+    public static void produceRadix() {
+        int[] range = new int[]{(int)Math.pow(2,10),(int)Math.pow(2,20),(int)Math.pow(2,30)};
+        int[] base = new int[]{2,(int)Math.pow(2,5),(int)Math.pow(2,10),(int)Math.pow(2,15),(int)Math.pow(2,20),(int)Math.pow(2,25)};
+        int[] arr = new int[500000];
+        Random randomGenerator = new Random();
+        int Numiter = 250;
+        int[][] durationList = new int[6][Numiter];
+        for(int j=0;j<3;j++) {//range
+            for(int k=0;k<6;k++) {//base
+                for (int l = 0; l < Numiter; l++) {//Numiter
+                    for (int i = 0; i < arr.length; i++) //initialize the array
+                    {
+                        arr[i] = randomGenerator.nextInt(range[j]);
+                    }
+                    long startTime = System.currentTimeMillis();
+                    Sort.radixSort(arr, base[k]);
+                    long endTime = System.currentTimeMillis();
+                    int duration = (int) (endTime - startTime);
+                    durationList[k][l] = duration;
+                }
+            }
+            double[] avg =getAvg(durationList);
+            double[] div =getDiv(durationList);
+            for(int k=0;k<6;k++)
+            {
+                System.out.println("for range: " + j +"and base: " + k+" avg = "+avg[k]+" ,div = "+div[k]);
+            }
+        }
+    }
+    public static void produceResults() {
         int[] size = new int[]{10000, 50000, 100000, 500000, 1000000};//array for sizes
         String[] algo = new String[]{"mergeSortIterative:", "mergeSortRecursive:", "quickSortClass:", "quickSortRecitation:", "java's sort:", "radixSort:"};
-        int n = 100000;
         int Numiter = 250;
         int sort = 0;
         for (int i = 0; i < 3; i++) {
@@ -35,7 +64,6 @@ public class SortTest {
 
         }
     }
-
 
     public static double[] getAvg(int[][] arr) {
         double[] avg = new double[6];
@@ -96,7 +124,6 @@ public class SortTest {
 
     public static int[][] durationList(int size, int Numiter, int sort) {
         Sort<Integer> sorter = new Sort<Integer>();
-        sorter.setNaiveSortThreshold(500);
         int[][] durationList = new int[6][Numiter];
         int[] avg = new int[6];
         Integer[] arr = new Integer[size];
@@ -144,40 +171,45 @@ public class SortTest {
                     }
                     case 2://quickSortClass
                     {
-
-                        Integer[] Copy = new Integer[arr.length];
-                        for (int j = 0; j < arr.length; ++j) {//initialize the array
-                            Copy[j] = arr[j];
-                        }
-                        try {
-                            long startTime = System.currentTimeMillis();
-                            sorter.quickSortClass(Copy);
-                            long endTime = System.currentTimeMillis();
-                            int duration = (int) (endTime - startTime);
-                            durationList[i][k] = duration;
-                            break;
-                        } catch (StackOverflowError e) {
-                            System.err.println("ouch!");
-                            continue;
-                        }
-                    }
-                    case 3://quickSortRecitation
-                    {
-                        try {
+                        if (sort == 0) {
                             Integer[] Copy = new Integer[arr.length];
                             for (int j = 0; j < arr.length; ++j) {//initialize the array
                                 Copy[j] = arr[j];
                             }
-                            long startTime = System.currentTimeMillis();
-                            sorter.quickSortRecitation(Copy);
-                            long endTime = System.currentTimeMillis();
-                            int duration = (int) (endTime - startTime);
-                            durationList[i][k] = duration;
-                            break;
-                        } catch (StackOverflowError e) {
-                            System.err.println("ouch!");
-                            continue;
+                            try {
+                                long startTime = System.currentTimeMillis();
+                                sorter.quickSortClass(Copy);
+                                long endTime = System.currentTimeMillis();
+                                int duration = (int) (endTime - startTime);
+                                durationList[i][k] = duration;
+                                break;
+                            } catch (StackOverflowError e) {
+                                System.err.println("ouch!");
+                                continue;
+                            }
                         }
+                        break;
+                    }
+                    case 3://quickSortRecitation
+                    {
+                        if (sort == 0) {
+                            try {
+                                Integer[] Copy = new Integer[arr.length];
+                                for (int j = 0; j < arr.length; ++j) {//initialize the array
+                                    Copy[j] = arr[j];
+                                }
+                                long startTime = System.currentTimeMillis();
+                                sorter.quickSortRecitation(Copy);
+                                long endTime = System.currentTimeMillis();
+                                int duration = (int) (endTime - startTime);
+                                durationList[i][k] = duration;
+                                break;
+                            } catch (StackOverflowError e) {
+                                System.err.println("ouch!");
+                                continue;
+                            }
+                        }
+                        break;
                     }
                     case 4://Arrays.sort
                     {
